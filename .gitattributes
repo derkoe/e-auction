@@ -1,0 +1,82 @@
+.gitattributes text
+.gitignore     text
+
+*.doc    binary diff=astextplain
+*.DOC    binary diff=astextplain
+*.docx   binary diff=astextplain
+*.DOCX   binary diff=astextplain
+*.dot    binary diff=astextplain
+*.DOT    binary diff=astextplain
+*.xlsx   binary
+*.XLSX   binary
+*.xls    binary
+*.XLS    binary
+*.pdf    binary diff=astextplain
+*.PDF    binary diff=astextplain
+*.rtf    binary diff=astextplain
+*.RTF    binary diff=astextplain
+
+# Known Binary Files
+*.png    binary
+*.jpg    binary
+*.gif    binary
+
+*.java   text
+MANIFEST.MF  text
+*.properties text
+*.jsp    text
+
+*.tml    text
+
+*.cs     text=auto diff=csharp
+*.vb     text=auto
+*.c      text=auto
+*.cpp    text=auto
+*.cxx    text=auto
+*.h      text=auto
+*.hxx    text=auto
+*.py     text=auto
+*.rb     text=auto
+*.html   text=auto
+*.htm    text=auto
+*.css    text=auto
+*.scss   text=auto
+*.sass   text=auto
+*.less   text=auto
+*.js     text=auto
+*.coffee text=auto
+*.json   text=auto
+*.lisp   text=auto
+*.clj    text=auto
+*.sql    text=auto
+*.php    text=auto
+*.lua    text=auto
+*.m      text=auto
+*.asm    text=auto
+*.erl    text=auto
+*.fs     text=auto
+*.fsx    text=auto
+*.hs     text=auto
+*.md     text=auto
+
+*.csv    text
+*.txt    text
+
+*.xml    text
+*.xsl    text
+*.xsd    text
+
+*.gradle text
+*.sh     text
+
+.checkstyle  text
+
+*.csproj text=auto merge=union
+*.vbproj text=auto merge=union
+*.fsproj text=auto merge=union
+*.dbproj text=auto merge=union
+*.sln text=auto eol=crlf merge=union
+
+# Windows Batch Files
+*.cmd    text eol=crlf
+*.bat    text eol=crlf
