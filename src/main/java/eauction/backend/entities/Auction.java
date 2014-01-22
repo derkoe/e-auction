@@ -1,5 +1,7 @@
 package eauction.backend.entities;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -17,6 +20,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import eauction.backend.entities.AuctionItem.AuctionItemStatus;
 
 @Entity
 public class Auction {
@@ -46,7 +51,7 @@ public class Auction {
   @Temporal(TemporalType.TIMESTAMP)
   private Date end;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @OrderBy("itemNumber")
   private List<AuctionItem> items;
 
@@ -62,6 +67,10 @@ public class Auction {
     return status;
   }
 
+  public void setStatus(AuctionStatus status) {
+    this.status = status;
+  }
+
   public Date getPlannedStart() {
     return plannedStart;
   }
@@ -70,12 +79,33 @@ public class Auction {
     CREATED, PLANNED, IN_PROGRESS, CLOSED
   }
 
-  public List<AuctionItem> getItems() {
-    return items;
+  public AuctionItem addItem(BigDecimal callPrice) {
+    if (items == null) {
+      items = new ArrayList<AuctionItem>();
+    }
+    AuctionItem item = new AuctionItem(items.size() + 1, callPrice);
+    items.add(item);
+    return item;
   }
 
-  public void start(Date now) {
+  public void start(Date startDate) {
     status = AuctionStatus.IN_PROGRESS;
-    start = now;
+    start = startDate;
+  }
+
+  public void end(Date endDate) {
+    status = AuctionStatus.CLOSED;
+    end = endDate;
+  }
+
+  public AuctionItem nextItem() {
+    for (AuctionItem item : items) {
+      if (item.getStatus() == AuctionItemStatus.OPEN) {
+        item.activate();
+        return item;
+      }
+    }
+    status = AuctionStatus.CLOSED;
+    return null;
   }
 }

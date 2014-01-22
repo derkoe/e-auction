@@ -1,22 +1,27 @@
 package eauction.api;
 
-import java.math.BigDecimal;
+import org.springframework.core.style.ToStringCreator;
 
 import eauction.backend.DateFactory;
+import eauction.backend.entities.AuctionItem;
 
 public class AuctionUpdate {
 
   private AuctionUpdateStatus status;
   private int auctionId;
   private Long auctionStartTime;
-  private Integer itemNumber;
+  private AuctionItem item;
 
-  private BigDecimal price;
-
-  public AuctionUpdate(int auctionId, long auctionStartTime) {
-    this.status = AuctionUpdateStatus.COUNTDOWN;
+  public AuctionUpdate(AuctionUpdateStatus status, int auctionId, long auctionStartTime) {
+    this.status = status;
     this.auctionId = auctionId;
     this.auctionStartTime = auctionStartTime;
+  }
+
+  public AuctionUpdate(AuctionUpdateStatus status, int auctionId, AuctionItem currentItem) {
+    this.status = status;
+    this.auctionId = auctionId;
+    this.item = currentItem;
   }
 
   public AuctionUpdateStatus getStatus() {
@@ -32,14 +37,19 @@ public class AuctionUpdate {
   }
 
   public int getCountdownTimeSeconds() {
-    return (int)((auctionStartTime - DateFactory.currentTimestamp().getTime()) / 1000L);
+    return auctionStartTime == null ? 0 : (int)((auctionStartTime - DateFactory.currentTimestamp().getTime()) / 1000L);
   }
 
-  public Integer getItemNumber() {
-    return itemNumber;
+  public AuctionItem getItem() {
+    return item;
   }
 
   public static enum AuctionUpdateStatus {
-    COUNTDOWN, NEXT_ITEM, NEW_BID, GOING_ONCE, GOING_TWICE, SOLD, NO_BID, NO_BID_TWICE, NOT_SOLD
+    COUNTDOWN, NEXT_ITEM, NEW_BID, GOING_ONCE, GOING_TWICE, SOLD, NO_BID, NO_BID_TWICE, NOT_SOLD, END
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringCreator(this).append("auctionId", auctionId).append("status", status).toString();
   }
 }

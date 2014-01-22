@@ -1,11 +1,12 @@
-(function($, angular) {
+(function ($, angular) {
+    'use strict';
     var auction = angular.module('auction', []);
 
-    auction.factory('auctionMessageService', [ '$rootScope', function($rootScope) {
+    auction.factory('auctionMessageService', [ '$rootScope', function ($rootScope) {
         var socket = new SockJS('/auction');
         var stompClient = Stomp.over(socket);
-        stompClient.connect('', '', function(frame) {
-            stompClient.subscribe('/topic/auction', function(message) {
+        stompClient.connect('', '', function (frame) {
+            stompClient.subscribe('/topic/auction', function (message) {
                 var auctionUpdate = angular.fromJson(message.body);
                 $rootScope.$broadcast('auctionUpdate', auctionUpdate);
             });
@@ -13,7 +14,7 @@
         return {};
     } ]);
 
-    auction.controller('AuctionCtrl', [ '$scope', 'auctionMessageService', function($scope, auctionMessageService) {
+    auction.controller('AuctionCtrl', [ '$scope', 'auctionMessageService', function ($scope, auctionMessageService) {
         $scope.auctionUpdate = {};
 
         $scope.$on('auctionUpdate', function(event, auctionUpdate) {
